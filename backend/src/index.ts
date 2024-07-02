@@ -1,8 +1,9 @@
 import server from './server'
+import colors from 'colors'
 
 
 const port = process.env.PORT || 3000
 
 server.listen(port, ()  => {
-    console.log(`REST API funcionando en el puerto ${port}`)
+    console.log( colors.bgGreen.bold(`REST API funcionando en el puerto ${port}`) )
 })
