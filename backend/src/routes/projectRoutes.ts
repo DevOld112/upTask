@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { body, param } from 'express-validator'
 import { ProjectController } from '../controllers/projectControllers'
 import { handleInputErrors } from '../middleware/validation'
+import { TaskController } from '../controllers/taskControllers'
 
 const router = Router()
 
@@ -42,6 +43,15 @@ router.delete('/:id',
     param('id').isMongoId().withMessage('ID no Valido'),
     handleInputErrors,
     ProjectController.deleteProject
+)
+
+/* Rutas para las Tareas || Explicacion: como las tareas van a estar dentro de los proyectos, hay que incluilas en el mismo archivo de rutas padre */
+
+router.post('/:projectId/tasks',
+
+    TaskController.createProject
+
+
 )
 
 
