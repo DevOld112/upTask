@@ -9,7 +9,7 @@ export class ProjectController {
 
         try {
             const projects = await Project.find({})
-            res.json(projects)
+            res.status(200).json(projects)
         } catch (error) {
             console.log(error)
         }
@@ -35,7 +35,7 @@ export class ProjectController {
 
         try {
             const { id } = req.params
-            const project = await Project.findById(id)
+            const project = await Project.findById(id).populate("tasks")
 
             if(!project){
                 const error = new Error('Proyecto No Encontrado')
@@ -78,7 +78,7 @@ export class ProjectController {
             const { id } = req.params
             const project = await Project.findById(id)
 
-
+            
             if(!project){
                 const error = new Error('Proyecto No Encontrado')
                 return res.status(404).json({error: error.message})

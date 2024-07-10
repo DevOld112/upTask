@@ -3,6 +3,8 @@ import { body, param } from 'express-validator'
 import { ProjectController } from '../controllers/projectControllers'
 import { handleInputErrors } from '../middleware/validation'
 import { TaskController } from '../controllers/taskControllers'
+import { validateProjectExists } from '../middleware/project'
+import Task from '../models/Task'
 
 const router = Router()
 
@@ -45,13 +47,46 @@ router.delete('/:id',
     ProjectController.deleteProject
 )
 
-/* Rutas para las Tareas || Explicacion: como las tareas van a estar dentro de los proyectos, hay que incluilas en el mismo archivo de rutas padre */
+/* Rutas para las Tareas || Explicacion: como las tareas van a estar dentro de los proyectos, hay que incluirlas en el mismo archivo de rutas padre */
 
 router.post('/:projectId/tasks',
+    validateProjectExists,
+    body('name')
+        .notEmpty().withMessage('El Nombre de la tarea es Obligatorio'),
+    body('description')
+        .notEmpty().withMessage('Agregar Descripcion es Obligatorio'),
+    handleInputErrors,
+    TaskController.createTask
+)
 
-    TaskController.createProject
+router.get('/:projectId/tasks',
+    validateProjectExists,
+    TaskController.getAllTaskByProject
+)
 
+router.get('/:projectId/tasks/:taskId', 
+    param('taskId').isMongoId().withMessage('ID no Valido'),
+    validateProjectExists,
+    handleInputErrors,
+    TaskController.getTaskById
+)
 
+router.put('/:projectId/tasks/:taskId', 
+    param('taskId').isMongoId().withMessage('ID no Valido'),
+    body('name')
+        .notEmpty().withMessage('El Nombre de la tarea es Obligatorio'),
+    body('description')
+        .notEmpty().withMessage('Agregar Descripcion es Obligatorio'),
+    validateProjectExists,
+    handleInputErrors,
+    TaskController.updateTask
+)
+
+router.delete('/:projectId/tasks/:taskId', 
+    param('taskId').isMongoId().withMessage('ID no Valido'),
+    validateProjectExists,
+    handleInputErrors,
+    TaskController.deleteTask
 )
 
 
