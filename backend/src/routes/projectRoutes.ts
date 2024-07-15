@@ -3,8 +3,9 @@ import { body, param } from 'express-validator'
 import { ProjectController } from '../controllers/projectControllers'
 import { handleInputErrors } from '../middleware/validation'
 import { TaskController } from '../controllers/taskControllers'
-import { validateProjectExists } from '../middleware/project'
-import Task from '../models/Task'
+import { projectExists } from '../middleware/project'
+import { taskBelongsToProject, taskExists } from '../middleware/task'
+
 
 const router = Router()
 
@@ -49,8 +50,10 @@ router.delete('/:id',
 
 /* Rutas para las Tareas || Explicacion: como las tareas van a estar dentro de los proyectos, hay que incluirlas en el mismo archivo de rutas padre */
 
+router.param('projectId', projectExists)
+
 router.post('/:projectId/tasks',
-    validateProjectExists,
+   
     body('name')
         .notEmpty().withMessage('El Nombre de la tarea es Obligatorio'),
     body('description')
@@ -60,13 +63,16 @@ router.post('/:projectId/tasks',
 )
 
 router.get('/:projectId/tasks',
-    validateProjectExists,
+    
     TaskController.getAllTaskByProject
 )
 
+router.param('taskId', taskExists)
+router.param('taskId', taskBelongsToProject)
+
 router.get('/:projectId/tasks/:taskId', 
     param('taskId').isMongoId().withMessage('ID no Valido'),
-    validateProjectExists,
+    
     handleInputErrors,
     TaskController.getTaskById
 )
@@ -77,16 +83,24 @@ router.put('/:projectId/tasks/:taskId',
         .notEmpty().withMessage('El Nombre de la tarea es Obligatorio'),
     body('description')
         .notEmpty().withMessage('Agregar Descripcion es Obligatorio'),
-    validateProjectExists,
+    
     handleInputErrors,
     TaskController.updateTask
 )
 
 router.delete('/:projectId/tasks/:taskId', 
     param('taskId').isMongoId().withMessage('ID no Valido'),
-    validateProjectExists,
+    
     handleInputErrors,
     TaskController.deleteTask
+)
+
+router.post('/:projectId/tasks/:taskId/status',
+    param('taskId').isMongoId().withMessage('ID no Valido'),
+    body('status')
+        .notEmpty().withMessage('El estado es Obligatorio'),
+    handleInputErrors,
+    TaskController.updateStatus
 )
 
 
