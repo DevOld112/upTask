@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express'
-import Project from '../models/Project'
 import Task from '../models/Task'
 
 export class TaskController {
@@ -12,7 +11,7 @@ export class TaskController {
 
             await Promise.allSettled([task.save(), req.project.save()])
 
-            res.status(200).json(task)
+            res.status(200).send('Tarea Creada Correctamente')
         } catch (error) {
             console.log(error)
         }
@@ -30,12 +29,14 @@ export class TaskController {
 
     static getTaskById = async (req: Request, res: Response) => {
         try {
+            const { taskId } = req.params
+            const task = await Task.findById(taskId)
 
-            return res.status(200).json(req.task)
+            res.status(200).json(task)
 
         } catch (error) {
             console.log(error)
-            res.status(500).json({error: 'Hubo un error en la obtencion de la tarea'})
+            res.status(500).send('Hubo un error en la obtencion de la tarea')
         }
     }
 
