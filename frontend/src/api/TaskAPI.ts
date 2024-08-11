@@ -15,7 +15,7 @@ export async function createTask({formData, projectId} : Pick<TaskAPI, 'formData
     
     try {
         const url = `/projects/${projectId}/tasks`
-        console.log(url)
+        
         const { data } = await api.post<string>(url, formData)
 
         console.log(data)
