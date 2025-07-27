@@ -200,11 +200,6 @@ MIT License - Ver [LICENSE](./LICENSE) para más detalles.
 
 [![Deploy en Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)  
 
---- 
 
-Este README profesional incluye:  
-- ✅ Stack tecnológico actualizado (MERN con TypeScript)  
-- 📊 Diagrama de arquitectura interactivo  
-- 🔐 Mejores prácticas de seguridad  
-- 🛠️ Guías de despliegue realistas  
-- 📱 Compatibilidad con móviles (responsive)
+
+
